@@ -5,10 +5,12 @@ cd $(readlink -f $(dirname ${BASH_SOURCE[0]}))
 set -ex
 
 tainted=$(cat /proc/sys/kernel/tainted)
-if [ $tainted -eq 0 -o $tainted -eq 1024 ]; then
-	:
-else
+if [ $tainted -ne 0 -a $tainted -ne 1024 ]; then
 	exit
 fi
-sleep 30
+sleep 25
+loggedin=$(who)
+if [ ! -z "$loggedin" ]; then
+	exit
+fi
 reboot
